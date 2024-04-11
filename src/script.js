@@ -6,11 +6,28 @@ function setup() {
   frameRate(15);
   gameBoard = new GameBoard();
   snake = new Snake(gameBoard);
+  food = new Food(gameBoard);
 }
 
 function draw() {
   background(100);
+  food.render();
   snake.render();
+
+  if (foodWithinReach(food, snake)) {
+    snake.eat(food);
+  }
+}
+
+function foodWithinReach(food, snake) {
+  const distance = dist(
+    food.position.x,
+    food.position.y,
+    snake.position.x,
+    snake.position.y
+  );
+
+  return distance <= 1;
 }
 
 function keyPressed() {
@@ -25,9 +42,3 @@ function keyPressed() {
       return snake.setDirection(-1, 0);
   }
 }
-
-// Classes:
-// - GameBoard
-// - Snake
-// - Food
-// - ScoreBoard
