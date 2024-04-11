@@ -23,8 +23,8 @@ function foodWithinReach(food, snake) {
   const distance = dist(
     food.position.x,
     food.position.y,
-    snake.position.x,
-    snake.position.y
+    snake.headPosition.x,
+    snake.headPosition.y
   );
 
   return distance <= 1;
