@@ -27,7 +27,7 @@ function foodWithinReach(food, snake) {
     snake.headPosition.y
   );
 
-  return distance <= 2;
+  return distance <= 4;
 }
 
 function keyPressed() {

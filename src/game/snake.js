@@ -63,6 +63,16 @@ function Snake(gameBoard) {
         this.gameScale
       )
     );
+
+    // TODO: FIXME adding two tailParts because first eat not working as expected.
+    if(this.tail.length === 1){
+      this.tail.unshift(
+        createVector(this.headPosition.x, this.headPosition.y).mult(
+          this.gameScale
+        )
+      );
+    }
+
     food.spawn();
   };
 
