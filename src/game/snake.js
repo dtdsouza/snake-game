@@ -16,12 +16,19 @@ function Snake(gameBoard) {
     );
 
     this.moveTail();
-    this.renderTail();
     this.movePositionBasedOnDirection(this.headPosition);
+    this.renderTail();
   };
 
   this.moveTail = () => {
-    // TODO: implement
+    for (let i = this.tail.length - 1; i >= 0; i--) {
+      if (i === 0) {
+        this.tail[i] = createVector(this.headPosition.x, this.headPosition.y);
+      } else {
+        const previousTailPart = this.tail[i - 1];
+        this.tail[i] = createVector(previousTailPart.x, previousTailPart.y);
+      }
+    }
   };
 
   this.crossBorder = () => {
@@ -40,12 +47,22 @@ function Snake(gameBoard) {
   };
 
   this.setDirection = (xDirection, yDirection) => {
+    if (
+      (this.direction.x !== 0 && xDirection !== 0) ||
+      (this.direction.y !== 0 && yDirection !== 0)
+    ) {
+      return;
+    }
     this.direction.x = xDirection;
     this.direction.y = yDirection;
   };
 
   this.eat = (food) => {
-    this.tail.unshift(createVector(this.headPosition.x, this.headPosition.y));
+    this.tail.unshift(
+      createVector(this.headPosition.x, this.headPosition.y).mult(
+        this.gameScale
+      )
+    );
     food.spawn();
   };
 
@@ -54,16 +71,10 @@ function Snake(gameBoard) {
     position.y += this.direction.y * this.gameScale;
   };
 
-  this.movePositionBackwards = (position) => {
-    position.x -= this.direction.x * this.gameScale;
-    position.y -= this.direction.y * this.gameScale;
-  };
-
   this.renderTail = () => {
     fill(255);
     this.tail.forEach((tailPart) => {
       rect(tailPart.x, tailPart.y, this.gameScale, this.gameScale);
     });
-    aux = null;
   };
 }

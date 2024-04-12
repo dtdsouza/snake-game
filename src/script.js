@@ -13,7 +13,7 @@ function draw() {
   background(100);
   food.render();
   snake.render();
-
+  
   if (foodWithinReach(food, snake)) {
     snake.eat(food);
   }
@@ -27,7 +27,7 @@ function foodWithinReach(food, snake) {
     snake.headPosition.y
   );
 
-  return distance <= 1;
+  return distance <= 2;
 }
 
 function keyPressed() {
