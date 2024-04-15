@@ -3,9 +3,11 @@ function Snake(gameBoard) {
   this.gameScale = gameBoard.getGameScale();
   this.direction = createVector(0, 0);
   this.tail = [];
+  this.score = 0;
+  this.status = "live";
 
   this.render = () => {
-    fill(200);
+    fill(0, 255, 0);
 
     this.crossBorder();
     rect(
@@ -15,9 +17,11 @@ function Snake(gameBoard) {
       this.gameScale
     );
 
-    this.moveTail();
-    this.movePositionBasedOnDirection(this.headPosition);
-    this.renderTail();
+    if (this.status === "live") {
+      this.moveTail();
+      this.movePositionBasedOnDirection(this.headPosition);
+      this.renderTail();
+    }
   };
 
   this.moveTail = () => {
@@ -65,7 +69,7 @@ function Snake(gameBoard) {
     );
 
     // TODO: FIXME adding two tailParts because first eat not working as expected.
-    if(this.tail.length === 1){
+    if (this.tail.length === 1) {
       this.tail.unshift(
         createVector(this.headPosition.x, this.headPosition.y).mult(
           this.gameScale
@@ -73,6 +77,7 @@ function Snake(gameBoard) {
       );
     }
 
+    this.score++;
     food.spawn();
   };
 
@@ -82,9 +87,44 @@ function Snake(gameBoard) {
   };
 
   this.renderTail = () => {
-    fill(255);
+    fill(0, 255, 0);
     this.tail.forEach((tailPart) => {
       rect(tailPart.x, tailPart.y, this.gameScale, this.gameScale);
     });
+  };
+
+  this.checkDeath = () => {
+    const headBitesTail = this.tail.find((tailPart) => {
+      const distance = dist(
+        tailPart.x,
+        tailPart.y,
+        snake.headPosition.x,
+        snake.headPosition.y
+      );
+
+      if (distance <= 10) {
+        return true;
+      }
+
+      return false;
+    });
+
+    if (!!headBitesTail) {
+      this.death();
+    }
+    return !!headBitesTail;
+  };
+
+  this.death = () => {
+    this.setDirection(0, 0);
+    this.status = "dead";
+  };
+
+  this.reset = () => {
+    this.tail = [];
+    this.headPosition = new GameBoardPiece(gameBoard).getRandomPosition();
+    this.score = 0;
+    this.direction = createVector(0, 0);
+    this.status = "live";
   };
 }

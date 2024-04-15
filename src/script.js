@@ -1,22 +1,43 @@
 let snake;
 let gameBoard;
+let resetButton;
 
 function setup() {
-  createCanvas(800, 800);
-  frameRate(15);
+  createCanvas(600, 600);
+  frameRate(10);
   gameBoard = new GameBoard();
   snake = new Snake(gameBoard);
+  resetButton = createButton("Reset");
+  resetButton.hide();
+
   food = new Food(gameBoard);
 }
 
 function draw() {
-  background(100);
+  background(10);
+  text(`Score: ${snake.score}`, 30, 30);
+
   food.render();
   snake.render();
-  
+
   if (foodWithinReach(food, snake)) {
     snake.eat(food);
   }
+
+  if (snake.checkDeath()) {
+    gameOver();
+  }
+}
+
+function gameOver() {
+  text(`Game Over: ${snake.score}`, 250, 300);
+  resetButton.show();
+  resetButton.position(500, 600);
+  resetButton.mousePressed(() => {
+    snake.reset();
+    food.spawn();
+    resetButton.hide();
+  });
 }
 
 function foodWithinReach(food, snake) {
@@ -27,7 +48,7 @@ function foodWithinReach(food, snake) {
     snake.headPosition.y
   );
 
-  return distance <= 4;
+  return distance <= 10;
 }
 
 function keyPressed() {
